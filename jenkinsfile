@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Préparation') {
+            steps {
+                sh 'npm install'  // Installation des dépendances
+            }
+        }
+        stage('Tests') {
+            steps {
+                sh 'npm test'  // Exécution des tests
+            }
+        }
+        stage('Construction Docker') {
+            steps {
+                script {
+                    docker.build('monapi:latest')  // Construction de l'image Docker
+                }
+            }
+        }
+        stage('Déploiement') {
+            steps {
+                sh 'docker-compose up -d'  // Déploiement de l'API avec Docker Compose
+            }
+        }
+    }
+}
